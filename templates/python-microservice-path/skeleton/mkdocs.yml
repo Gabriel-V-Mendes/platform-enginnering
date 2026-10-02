@@ -1,0 +1,9 @@
+site_name: ${{ values.name }}
+site_description: Documentação do microsserviço ${{ values.name }}
+
+nav:
+  - Início: index.md
+  - API: api.md
+
+plugins:
+  - techdocs-core

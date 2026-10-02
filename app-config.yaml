@@ -1,0 +1,63 @@
+app:
+  title: IDP - Platform Engineering
+  baseUrl: http://localhost:3000
+
+organization:
+  name: Gabriel-V-Mendes
+
+backend:
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+  cors:
+    origin: http://localhost:3000
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: better-sqlite3
+    connection: ':memory:'
+
+auth:
+  providers:
+    guest: {}
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+
+# Kubernetes: configurado apenas em app-config.production.yaml
+# Para testar localmente, defina K8S_CLUSTER_URL e K8S_SERVICE_ACCOUNT_TOKEN
+# como variáveis de ambiente e adicione a seção 'kubernetes:' abaixo.
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  locations:
+    - type: file
+      target: ../../templates/python-microservice-path/template.yaml
+      rules:
+        - allow: [Template]
+  rules:
+    - allow: [Component, System, API, Resource, Location, Template]
+  providers:
+    github:
+      providerId:
+        organization: 'Gabriel-V-Mendes'
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'main'
+        schedule:
+          initialDelay: { seconds: 30 }
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }

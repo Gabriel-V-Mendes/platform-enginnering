@@ -1,0 +1,82 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: python-fastapi-template
+  title: Python FastAPI Microservice
+  description: Cria um microsserviço Python moderno, seguro (non-root), com CI/CD (Trivy scan) e Observabilidade base.
+spec:
+  owner: guests
+  type: service
+  parameters:
+    - title: Detalhes do Serviço
+      required:
+        - name
+        - description
+        - owner
+      properties:
+        name:
+          title: Nome do Serviço
+          type: string
+          pattern: '^[a-z0-9-]+$'
+        description:
+          title: Descrição
+          type: string
+        owner:
+          title: Time Responsável
+          type: string
+          default: guests
+    - title: Configuração do Repositório
+      required:
+        - githubOrg
+        - githubRepo
+      properties:
+        githubOrg:
+          title: Organização / Usuário do GitHub
+          type: string
+        githubRepo:
+          title: Nome do Repositório GitHub
+          type: string
+
+  steps:
+    - id: fetch-base
+      name: Gerando Código Fonte (Skeleton)
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          githubOrg: ${{ parameters.githubOrg }}
+          githubRepo: ${{ parameters.githubRepo }}
+
+    - id: rename-github
+      name: Configurando GitHub Actions
+      action: fs:rename
+      input:
+        files:
+          - from: github-folder
+            to: .github
+
+    - id: publish
+      name: Publicando no GitHub
+      action: publish:github
+      input:
+        allowedHosts: ['github.com']
+        description: 'Repositório gerado automaticamente pelo IDP'
+        repoUrl: github.com?owner=${{ parameters.githubOrg }}&repo=${{ parameters.githubRepo }}
+
+    - id: register
+      name: Registrando no Software Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+  output:
+    links:
+      - title: Acessar Repositório no GitHub
+        url: ${{ steps['publish'].output.remoteUrl }}
+      - title: Abrir no Catálogo
+        icon: catalog
+        entityRef: ${{ steps['register'].output.entityRef }}

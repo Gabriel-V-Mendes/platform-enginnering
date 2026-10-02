@@ -1,0 +1,38 @@
+# Dependencies 
+node_modules/
+.yarn/cache
+.yarn/install-state.gz
+
+# Git
+.git/
+.gitignore
+
+# Markdown files
+!README.md
+!docs/**/*.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test coverage
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github/
+
+# Backstage temp
+backstage-temp/
+
+# Build artifacts 
+dist/
+dist-types/
+
+# Environment 
+infrastructure/docker/.env

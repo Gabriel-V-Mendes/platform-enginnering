@@ -1,0 +1,10 @@
+site_name: IDP Platform Engineering
+site_description: Documentação oficial da Plataforma Interna de Desenvolvimento
+
+nav:
+  - Início: index.md
+  - Arquitetura: architecture.md
+  - Golden Paths: golden-paths.md
+
+plugins:
+  - techdocs-core

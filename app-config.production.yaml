@@ -1,0 +1,66 @@
+app:
+  # Em produção (Docker)
+  baseUrl: http://localhost:7007
+
+backend:
+  baseUrl: http://localhost:7007
+  listen: ':7007'
+
+  # PostgreSQL via variáveis de ambiente
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+
+auth:
+  providers:
+    guest: {}
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+
+# Kubernetes: configure K8S_CLUSTER_URL e K8S_SERVICE_ACCOUNT_TOKEN no .env
+kubernetes:
+  serviceLocatorMethod:
+    type: 'multiTenant'
+  clusterLocatorMethods:
+    - type: 'config'
+      clusters:
+        - url: ${K8S_CLUSTER_URL}
+          name: production-cluster
+          authProvider: 'serviceAccount'
+          skipTLSVerify: true
+          serviceAccountToken: ${K8S_SERVICE_ACCOUNT_TOKEN}
+
+catalog:
+  # Em produção, usa os templates do projeto
+  locations:
+    - type: file
+      target: ./templates/python-microservice-path/template.yaml
+      rules:
+        - allow: [Template]
+  rules:
+    - allow: [Component, System, API, Resource, Location, Template]
+  providers:
+    github:
+      providerId:
+        organization: 'Gabriel-V-Mendes'
+        catalogPath: '/catalog-info.yaml'
+        filters:
+          branch: 'main'
+        schedule:
+          initialDelay: { seconds: 30 }
+          frequency: { minutes: 30 }
+          timeout: { minutes: 3 }

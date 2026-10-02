@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: platform-engineering-idp
+  description: O portal principal da nossa Plataforma Interna de Desenvolvimento
+  annotations:
+    github.com/project-slug: Gabriel-V-Mendes/platform-engineering-idp
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  lifecycle: experimental
+  owner: guests
