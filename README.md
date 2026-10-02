@@ -1,7 +1,7 @@
 
 [![CI — IDP Platform Engineering](https://github.com/Gabriel-V-Mendes/infraestrutura-aws-terraform-localstack/actions/workflows/ci.yml/badge.svg)](https://github.com/Gabriel-V-Mendes/infraestrutura-aws-terraform-localstack/actions/workflows/ci.yml)
 
-# 🏗️ IDP — Internal Developer Platform
+# 🏗️ IDP — Internal Developer Platform | (Está em Desenvolvimento)
 
 *"Construir pipelines e subir clusters Kubernetes é essencial, mas como resolvemos o atrito e a lentidão dos desenvolvedores no dia a dia?"*
 
